@@ -1,7 +1,7 @@
 """DataLoader and configuration for TabICL-based priors."""
 
 import torch
-from tabicl.prior.dataset import PriorDataset as TabICLPriorDataset
+from tabicl.prior._dataset import PriorDataset as TabICLPriorDataset
 from torch.utils.data import DataLoader
 
 
@@ -65,7 +65,9 @@ class TabICLPriorDataLoader(DataLoader):
         return dict(
             x=x.to(self.device),
             y=y.to(self.device),
-            target_y=y.to(self.device),  # target_y is identical to y (for downstream compatibility)
+            target_y=y.to(
+                self.device
+            ),  # target_y is identical to y (for downstream compatibility)
             train_test_split_index=train_test_split_index,
         )
 

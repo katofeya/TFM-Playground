@@ -87,6 +87,10 @@ def train(
                 if classification_task:
                     targets = targets.reshape((-1,)).to(torch.long)
                     output = output.view(-1, output.shape[-1])
+                    # TabPFN prior marks fully-degenerate samples with y=-100 (the CE ignore_index).
+                    # When all test targets are -100, the loss is 0/0 = nan; skip such batches.
+                    if (targets == -100).all():
+                        continue
 
                 losses = criterion(output, targets)
                 loss = losses.mean() / accumulate_gradients
